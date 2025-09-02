@@ -131,7 +131,7 @@ fi
 if [[ "$csv_mode" == "true" ]]; then
     PRINT_FORMAT="%-40s,%6s,%6s,%-6s,%-8s,%-8s,%-8s,%-8s,%-8s\n"
 else
-    PRINT_FORMAT="%-40s |%-6s|%6s| %-6s | %-8s | %-8s| %-8s| %-8s| %-8s\n"
+    PRINT_FORMAT="%-48s |%-6s|%6s| %-6s | %-8s | %-8s| %-8s| %-8s| %-8s\n"
 fi
 
 printf "$PRINT_FORMAT" "File Name" "lines" "py lines" "Pylint" "Flake8" "radon_cc"  "radon_mi"    "bandit_out" "MyPy"
@@ -161,8 +161,8 @@ for file in "${files[@]}"; do
     radon_mi=${radon_mi:-"N/A"}
 
     # Mypy
-    mypy_out=$(mypy "$file" 2>/dev/null || true | grep -v "Success:" | wc -l)
-    mypy_out=${mypy_out:-"0"}
+    #broken mypy_out=$(mypy "$file" 2>/dev/null || true | grep -v "Success:" | wc -l)
+    mypy_out=${mypy_out:-"broken"}
 
     # Bandit
     bandit_out=$(bandit -q -r "$file" 2>/dev/null | grep -c "Issue")
