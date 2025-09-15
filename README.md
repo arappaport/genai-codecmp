@@ -114,6 +114,7 @@ Personal opinons from using genAI to generate useful code.
 Kind of like how agile manifesto pulled together multiple successful SW team iterative dev patterns into Agile/Scrum, vibe coding is an natural extension to incremental improvements to SW process. 
 
  ![Vibe coding](images/vibe-coding-building-blocks.png)
+<img width="1024" height="1536" alt="vibe-coding-building-blocks" src="https://github.com/user-attachments/assets/71e70f78-ffed-476d-94eb-9ebfa3fef087" />
 
 
 |Level         |          Notes                          |
