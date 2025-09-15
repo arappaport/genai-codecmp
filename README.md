@@ -90,7 +90,7 @@ notes:
 4. Consider a few loops - generate code - then ask LLM to evaluate and improve code. 
 
 
-# Codegen in the SDLC - observations
+ # Codegen in the SDLC - observations
 
 Personal opinons from using genAI to generate useful code.
 
@@ -113,7 +113,8 @@ Personal opinons from using genAI to generate useful code.
 
 Kind of like how agile manifesto pulled together multiple successful SW team iterative dev patterns into Agile/Scrum, vibe coding is an natural extension to incremental improvements to SW process. 
 
-[Vibe coding](images/vibe-coding-building-blocks.png)
+ ![Vibe coding](images/vibe-coding-building-blocks.png)
+
 
 
 |Level         |          Notes                          |
