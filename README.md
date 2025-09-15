@@ -116,7 +116,6 @@ Kind of like how agile manifesto pulled together multiple successful SW team ite
  ![Vibe coding](images/vibe-coding-building-blocks.png)
 
 
-
 |Level         |          Notes                          |
 |--------------|-----------------------------------------|
 | CI/CD & testability |	Shift left. Tests are always commited with code. Human out-of-the-loop for comprehensive quality checks. |
