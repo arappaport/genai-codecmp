@@ -21,30 +21,50 @@
      * bandit_out: Bandit
      * MyPy: Mypy summary
 	 
+
+## Running
+
+### create and activate venv if needed
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
  ### run
 Start from root directory
 
 ```bash
 ~/bin/pyquality.sh  "./generated/copilot/*.py"
-
+```
 
 # Results
 
 
-
 ## Copilot
 
-| File Name                                        |lines |py lines| Pylint | Flake8   | radon_cc| radon_mi| bandit_out| MyPy  |
-|-------------------------------------------------|------|--------|--------|----------|---------|---------|---------|---------|
-|./generated/copilot/calc_app_usage_metrics.py    |60    |      35| 6.52   |        4 | 11.0    | A       | 0       | broken  |
-|./generated/copilot/calc_usage_metrics.py        |83    |      56| 7.17   |       12 | 6.0     | A       | 0       | broken  |
-|./generated/copilot/combine_usage_files.py       |74    |      51| 6.92   |        7 | 12.0    | A       | 0       | broken  |
-|./generated/copilot/count_app_users.py           |43    |      29| 6.25   |        4 | 6.0     | A       | 0       | broken  |
-|./generated/copilot/csv_str_parse.py             |37    |      24| 9.38   |        1 | 9.0     | A       | 0       | broken  |
-|./generated/copilot/gen_readme.py                |55    |      39| 7.14   |        1 | 8.0     | A       | 0       | broken  |
-|./generated/copilot/write_period_excel.py        |77    |      58| 6.40   |        5 | 7.0     | A       | 0       | broken  |
+|File Name                                        |lines|lines_src|lines_comments|Pylint|  Flake8|radon_cc|radon_mi|MyPy_errs|                bandit_sev|
+|./generated/copilot/__init__.py                  |    0|        0|             0|   N/A|       0|     N/A|       A|        0|       Hi: 0 Med: 0 Low: 0|
+|./generated/copilot/calc_app_usage_metrics.py    |   60|       26|             9|  6.52|       4|    11.0|       A|        1|       Hi: 0 Med: 0 Low: 0|
+|./generated/copilot/calc_usage_metrics.py        |   83|       47|            11|  7.17|      12|     6.0|       A|        4|       Hi: 0 Med: 0 Low: 0|
+|./generated/copilot/combine_usage_files.py       |   74|       40|             7|  6.92|       7|    12.0|       A|        2|       Hi: 0 Med: 0 Low: 0|
+|./generated/copilot/count_app_users.py           |   43|       20|             4|  6.25|       4|     6.0|       A|        1|       Hi: 0 Med: 0 Low: 0|
+|./generated/copilot/csv_str_parse.py             |   37|       16|             4|  9.38|       1|     9.0|       A|        0|       Hi: 0 Med: 0 Low: 0|
+|./generated/copilot/gen_readme.py                |   55|       25|             8|  7.14|       1|     8.0|       A|        1|       Hi: 0 Med: 0 Low: 0|
+|./generated/copilot/strip_quotes.py              |    0|        0|             0|   N/A|       0|     N/A|       A|        0|       Hi: 0 Med: 0 Low: 0|
+|./generated/copilot/write_period_excel.py        |   77|       43|             9|  6.40|       5|     7.0|       A|        1|       Hi: 0 Med: 0 Low: 0|
+
 
 ## Grok 
+
+|File Name                                        |lines|lines_src|lines_comments|Pylint|  Flake8|radon_cc|radon_mi|MyPy_errs|                bandit_sev|
+|./generated/grok/calc_app_usage_metrics.py       |   63|       29|            12|  4.80|       7|    11.0|       A|        1|       Hi: 0 Med: 0 Low: 0|
+|./generated/grok/calc_usage_metrics.py           |  104|       62|            15|  6.35|      15|     8.0|       A|        5|       Hi: 0 Med: 0 Low: 0|
+|./generated/grok/combine_usage_files.py          |  102|       61|            12|  6.15|      17|    13.0|       A|        2|       Hi: 0 Med: 0 Low: 0|
+|./generated/grok/count_app_users.py              |   48|       22|             8|  3.33|       4|     6.0|       A|        3|       Hi: 0 Med: 0 Low: 0|
+|./generated/grok/csv_str_parse.py                |   48|       21|             8| 10.00|       1|    10.0|       A|        0|       Hi: 0 Med: 0 Low: 0|
+|./generated/grok/gen_readme.py                   |   46|       18|             9|  5.33|       6|     9.0|       A|        2|       Hi: 0 Med: 0 Low: 0|
+|./generated/grok/strip_quotes.py                 |   37|       13|             8|  9.23|       3|     6.0|       A|        0|       Hi: 0 Med: 0 Low: 0|
+|./generated/grok/write_period_excel.py           |   67|       39|            10|  5.19|       5|     9.0|       A|        2|       Hi: 0 Med: 0 Low: 0|
+
 
 | File Name                                        |lines |py lines| Pylint | Flake8   | radon_cc| radon_mi| bandit_out| MyPy  |
 |-------------------------------------------------|------|--------|--------|----------|---------|---------|---------|---------|
@@ -58,25 +78,16 @@ Start from root directory
 | ./generated/grok/write_period_excel.py           |67    |      49| 5.19   |        5 | 9.0     | A       | 0       | broken |
 
 notes:  
- * keep any file wildcards in quotes
- *mypy may complain to install stubs =, such as  python3 -m pip install pandas-stub
+  * keep any file wildcards in quotes
+  * mypy may complain to install stubs =, such as  python3 -m pip install pandas-stub
 	 
-	 
-	 
-
-
+	
 
 ## Manual Process
 1. Manual - I copy each prompt into a LLM chat window and then copy-paste the generated files into a local py file. 
 2. See ./prompts/_common_prompt_snippet.txt
 
-## Running
 
-### create and activate venv if needed
-1. python3 -m venv .venv
-2. source .venv/bin/activate
-   or .venv\Scripts\Activate.ps1
-3. pip install -r requirements.txt
 
 
 
@@ -92,38 +103,39 @@ notes:
 
  # Codegen in the SDLC - observations
 
-Personal opinons from using genAI to generate useful code.
+Personal opinions from using genAI to generate useful code.
 
- 1. Summary of GenAI Code Gen
-	1. Great for individual productivity.  Provided…
+## Summary of GenAI Code Gen
+
+### 1. Great for individual productivity.  Provided…
 		a. Generated code is small and tight. 
 		b. Does one thing well.  Single Responsibility Principle (SRP) 
 		c. Is fully testable.  That is, you can test interface and all side-effects (memory, scale, security, etc.) 
-	2. Quality code requires discipline to create comprehensive prompts,  (but lots of reuse)
-	3. Responsibility recommendation:   Dev that introduces code into codebase is fully responsible.  
-	4. What is your project's authoritative source of correctness? 
-		a. the test case code (test-driven development) or the extremely detailed prompt that defines the test cases?        
- 2. Treat code gen like an JR dev that is very fast, smart and wants to please
+### 2. Quality code requires discipline to create comprehensive prompts,  (but lots of reuse)
+### 3. Responsibility recommendation:   Dev that introduces code into codebase is fully responsible.  
+### 4. What is your authoritative source of correctness for your project?
+  * the test case code (test-driven development) or the extremely detailed prompt that defines the test cases?
+## Treat code gen like an JR dev that is very fast, smart and wants to please
 	1. Speed > wisdom. They will give you what you asked for … but no more. 
 	2.  Imagine they solved every thing with the first entry on stackoverflow. 
 	3. Especially for things that require experience: 
-		a. security, big scale/perf, availability, logging without leaking (don't log session tokens or secrets), avoiding N^2 algos, cost, maintainability, etc. 
+		a. security, big scale/perf, availability, logging without leaking (do not log session tokens or secrets), avoiding N^2 algos, cost, maintainability, etc. 
 
- 3. Code Gen & Vibe coding - Powerful, but really only incremental step in SW dev
+## Code Gen & Vibe coding - Useful, but really only incremental step in SW dev improvements
 
 Kind of like how agile manifesto pulled together multiple successful SW team iterative dev patterns into Agile/Scrum, vibe coding is an natural extension to incremental improvements to SW process. 
 
- ![Vibe coding](images/vibe-coding-building-blocks.png)
-<img width="1024" height="1536" alt="vibe-coding-building-blocks" src="https://github.com/user-attachments/assets/71e70f78-ffed-476d-94eb-9ebfa3fef087" />
+ ![Vibe coding](./images/vibe-coding-building-blocks.png)
 
+Software development phase improvements leading to VIBE coding. 
 
 |Level         |          Notes                          |
 |--------------|-----------------------------------------|
 | CI/CD & testability |	Shift left. Tests are always commited with code. Human out-of-the-loop for comprehensive quality checks. |
 | Agile use cases & Behavioral driven Dev (BDD)	| Agile use cases. Focus on business process, not tech. Durable module interfaces with fluid UX and implementations. Cucumber, etc. | 
 | Pair programming | One user thinks functionality and strategy, the other thinks syntax and code. |
-| Test-driven dev (TDD)	| Think about what CORRECT means in your business case. Write tests - or at least enumerate them. 	Tests make sure you signature / behavior doesn't change with revisions.  | 
-| Modularized, Decoupled. |	Programming in the small.    Stable/Durable signatures / interfaces |
+| Test-driven dev (TDD)	| Think about what CORRECT means in your business case. Write tests - or at least enumerate them. 	Tests make sure the signature and behavior did not change with revisions.  | 
+| Modularized & Decoupled |	Programming in the small.  Think about Stable, Durable signatures and interfaces |
 | Top-down design	| Think through business problem and requirements before coding. | 
 
 
