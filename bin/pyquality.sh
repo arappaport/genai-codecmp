@@ -15,17 +15,19 @@ usage() {
     echo "Example: $0 \"*.py\""
 
     echo "Generates a table of scores."
-    echo " --csv - all outout in csv.   "
+    echo " --csv - all output in csv.   "
 
     echo "Columns: "
     echo " - lines - total lines including comments (wc)"
+    echo " - lines_src - Number of lines containing source code. Uses SLOC from radom raw"
+    echo " - lines_comments - total lines of python source.  Uses Comments from radom raw"
     echo " - pylint - pylint score "
     echo " - flake: "
     echo " - radon_cc: Radon code complexity"
     echo " - radon_mi: Radon code maintainability"
-    echo " - bandit_out: Bandit"
-    echo " - MyPy: Mypy summary"
-    printf "$PRINT_FORMAT" "File Name" "Pylint" "Flake8" "radon_cc"  "radon_mi"    "bandit_out" "MyPy"
+    echo " - bandit_sev: Bandit.  Lists count of High,Medium and Low severity findings."
+    echo " - MyPy: Mypy # of errors found. Lower is better."
+    printf "$PRINT_FORMAT" "File Name" "Pylint" "Flake8" "radon_cc"  "radon_mi"    "bandit_sev" "MyPy_errs"
     exit 1
 }
 
@@ -69,6 +71,8 @@ verbose_mode=false
 debug_mode=false
 x_value=""
 
+#Column seperator
+sep="|"
 # --- Parse arguments ---
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -127,14 +131,18 @@ if [[ ${#files[@]} -eq 0 ]]; then
     exit 2
 fi
 
-# set line format
+# line format.   #10 column names. keep this in sync with printf got header and each row.
 if [[ "$csv_mode" == "true" ]]; then
-    PRINT_FORMAT="%-40s,%6s,%6s,%-6s,%-8s,%-8s,%-8s,%-8s,%-8s\n"
+      #           1  2  3  4  5  6   7  8  9 10
+    PRINT_FORMAT="%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n"
 else
-    PRINT_FORMAT="%-48s |%-6s|%6s| %-6s | %-8s | %-8s| %-8s| %-8s| %-8s\n"
+    #                  1   2   3    4   5   6     7     8    9  10
+    PRINT_FORMAT="|%-48s |%5s|%9s|%14s|%6s|%8s|%8s|%8s|%9s|%26s|\n"
 fi
 
-printf "$PRINT_FORMAT" "File Name" "lines" "py lines" "Pylint" "Flake8" "radon_cc"  "radon_mi"    "bandit_out" "MyPy"
+#10 column names 0 keep this in sync with PRINT_FORMAT.
+#                          1           2       3            4              5        6         7            8          9             10
+printf "$PRINT_FORMAT" "File Name" "lines" "lines_src" "lines_comments" "Pylint" "Flake8" "radon_cc"  "radon_mi"   "MyPy_errs"   "bandit_sev"
 #TODO - printf "$PRINT_FORMAT" "$(printf '%.0s-' {1..40})" "$(printf '%.0s-' {1..6})"
 
 # --- Process each file ---
@@ -144,6 +152,12 @@ for file in "${files[@]}"; do
     #lines
     lines_score=$(wc -l "$file" | awk '{print $1}')
     pylines_score=$(grep -vE '^\s*$|^\s*#' "$file" | wc -l)
+
+    #Lines of code - we use radon
+    output=$(radon raw  "$file" 2>/dev/null )
+    lines_lloc=$(echo "$output" | grep LLOC | awk -F'LLOC: ' '{print $2}')
+    lines_sloc=$(echo "$output" | grep SLOC | awk -F'SLOC: ' '{print $2}')
+    lines_comments=$(echo "$output" | grep Comments | awk -F'Comments: ' '{print $2}')
 
     # pylint
     pylint_score=$(pylint --score y "$file" 2>/dev/null | awk '/Your code has been rated at/ { split($7, a, "/"); print a[1] }')
@@ -160,13 +174,21 @@ for file in "${files[@]}"; do
     radon_mi=$(radon mi "$file" 2>/dev/null |  sed 's/.*- //')
     radon_mi=${radon_mi:-"N/A"}
 
-    # Mypy
-    #broken mypy_out=$(mypy "$file" 2>/dev/null || true | grep -v "Success:" | wc -l)
-    mypy_out=${mypy_out:-"broken"}
+    # Mypy - count errors
+    mypy_out=$(mypy "$file"  | awk '/Found [0-9]+ error/ {print $2}')
+    mypy_out=${mypy_out:-"0"}
 
-    # Bandit
-    bandit_out=$(bandit -q -r "$file" 2>/dev/null | grep -c "Issue")
+    # Bandit - count by severity
+    bandit_out=$(bandit --quiet "$file" | awk '
+  /Severity: HIGH/ {high++}
+  /Severity: MEDIUM/ {medium++}
+  /Severity: LOW/ {low++}
+  END {print "Hi:",high+0, "Med:",medium+0, "Low:",low+0}
+')
+
     bandit_out=${bandit_out:-"0"}
 
-    printf "$PRINT_FORMAT" "$file" "${lines_score:-N/A}" "${pylines_score:-N/A}" "${pylint_score:-N/A}" "${flake8_out:-N/A}" "${radon_cc:-N/A}" "${radon_mi:-N/A}"  "${bandit_out:-N/A}" "${mypy_out:-N/A}"
+
+    # xopy "$PRINT_FORMAT" "File Name" "lines"                "lines_src"     "lines_comments"               "Pylint"             "Flake8"            "radon_cc"         "radon_mi"               "MyPy_errs"    "bandit_sev"
+    printf "$PRINT_FORMAT" "$file" "${lines_score:-N/A}" "${lines_sloc:-N/A}" "${lines_comments:-N/A}" "${pylint_score:-N/A}" "${flake8_out:-N/A}" "${radon_cc:-N/A}" "${radon_mi:-N/A}"  "${mypy_out:-N/A}" "${bandit_out:-N/A}"
 done
