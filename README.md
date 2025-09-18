@@ -35,6 +35,13 @@ Start from root directory
 ```bash
 ~/bin/pyquality.sh  "./generated/copilot/*.py"
 ```
+notes:  
+  * keep any file wildcards in quotes
+  * mypy may complain to install stubs =, such as  python3 -m pip install pandas-stub
+
+## Manual Process
+1. Manual - I copy each prompt into a LLM chat window and then copy-paste the generated files into a local py file. 
+2. See ./prompts/_common_prompt_snippet.txt
 
 # Results
 
@@ -42,6 +49,7 @@ Start from root directory
 ## Copilot
 
 |File Name                                        |lines|lines_src|lines_comments|Pylint|  Flake8|radon_cc|radon_mi|MyPy_errs|                bandit_sev|
+|-------------------------------------------------|-----|---------|--------------|------|--------|--------|--------|---------|--------------------------|
 |./generated/copilot/__init__.py                  |    0|        0|             0|   N/A|       0|     N/A|       A|        0|       Hi: 0 Med: 0 Low: 0|
 |./generated/copilot/calc_app_usage_metrics.py    |   60|       26|             9|  6.52|       4|    11.0|       A|        1|       Hi: 0 Med: 0 Low: 0|
 |./generated/copilot/calc_usage_metrics.py        |   83|       47|            11|  7.17|      12|     6.0|       A|        4|       Hi: 0 Med: 0 Low: 0|
@@ -56,6 +64,7 @@ Start from root directory
 ## Grok 
 
 |File Name                                        |lines|lines_src|lines_comments|Pylint|  Flake8|radon_cc|radon_mi|MyPy_errs|                bandit_sev|
+|-------------------------------------------------|-----|---------|--------------|------|--------|--------|--------|---------|--------------------------|
 |./generated/grok/calc_app_usage_metrics.py       |   63|       29|            12|  4.80|       7|    11.0|       A|        1|       Hi: 0 Med: 0 Low: 0|
 |./generated/grok/calc_usage_metrics.py           |  104|       62|            15|  6.35|      15|     8.0|       A|        5|       Hi: 0 Med: 0 Low: 0|
 |./generated/grok/combine_usage_files.py          |  102|       61|            12|  6.15|      17|    13.0|       A|        2|       Hi: 0 Med: 0 Low: 0|
@@ -65,27 +74,6 @@ Start from root directory
 |./generated/grok/strip_quotes.py                 |   37|       13|             8|  9.23|       3|     6.0|       A|        0|       Hi: 0 Med: 0 Low: 0|
 |./generated/grok/write_period_excel.py           |   67|       39|            10|  5.19|       5|     9.0|       A|        2|       Hi: 0 Med: 0 Low: 0|
 
-
-| File Name                                        |lines |py lines| Pylint | Flake8   | radon_cc| radon_mi| bandit_out| MyPy  |
-|-------------------------------------------------|------|--------|--------|----------|---------|---------|---------|---------|
-| ./generated/grok/calc_app_usage_metrics.py       |63    |      39| 4.80   |        7 | 11.0    | A       | 0       | broken  |
-| ./generated/grok/calc_usage_metrics.py           |104   |      73| 6.35   |       15 | 8.0     | A       | 0       | broken  |
-| ./generated/grok/combine_usage_files.py          |102   |      71| 6.15   |       17 | 13.0    | A       | 0       | broken  |
-| ./generated/grok/count_app_users.py              |48    |      31| 3.33   |        4 | 6.0     | A       | 0       | broken  |
-| ./generated/grok/csv_str_parse.py                |48    |      29| 10.00  |        1 | 10.0    | A       | 0       | broken  |
-| ./generated/grok/gen_readme.py                   |46    |      27| 5.33   |        6 | 9.0     | A       | 0       | broken  |
-| ./generated/grok/strip_quotes.py                 |37    |      21| 9.23   |        3 | 6.0     | A       | 0       | broken  |
-| ./generated/grok/write_period_excel.py           |67    |      49| 5.19   |        5 | 9.0     | A       | 0       | broken |
-
-notes:  
-  * keep any file wildcards in quotes
-  * mypy may complain to install stubs =, such as  python3 -m pip install pandas-stub
-	 
-	
-
-## Manual Process
-1. Manual - I copy each prompt into a LLM chat window and then copy-paste the generated files into a local py file. 
-2. See ./prompts/_common_prompt_snippet.txt
 
 
 
